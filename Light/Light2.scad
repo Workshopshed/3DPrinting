@@ -3,15 +3,15 @@ module LEDs(lights,radius,thickness,LEDSize)
 	translate([0,0,thickness / 3]) 
 		for ( i = [0 : 360/lights : 359] )
 			translate([sin(i)*radius,cos(i)*radius,0])
-				cylinder(h = thickness*2, r=LEDSize, center=true);
+				cylinder(h = thickness*2, d=LEDSize, center=true);
 }
 
-module WireSlot(radius,thickness,LEDSize)
+module WireSlot(radius,thickness,LEDSize,depth)
 {
-	translate([0,0,thickness*2/3]) 
+	translate([0,0,thickness-depth]) 
 	difference() {
-			cylinder(h = thickness, r=(radius)+LEDSize*1.6, center=true);
-			cylinder(h = thickness*1.6, r=(radius)-LEDSize*1.6, center=true);
+			cylinder(h = thickness, r=(radius)+LEDSize, center=true);
+			cylinder(h = thickness*1.6, r=(radius)-LEDSize, center=true);
 		}
 }
 
@@ -20,36 +20,40 @@ module Handle(handle,radius,thickness,hole,slot)
 	translate([radius*0.95,-(handle*1.5)/2,-thickness/2])
 		difference() {
 			union() {
+				*translate([-handle/4,(-handle*0.75)/2,0]) /*fillet but disabled */
+				*	cube([handle/2,handle*2.2,thickness], centre=true);
+				translate([handle,(handle*1.5)/2,thickness/2])
+					rotate([90,90,0])
+						cylinder(h = handle*1.5, r=thickness/2, center=true);
 				cube([handle,handle*1.5,thickness], centre=true);
 			}
-			translate([handle-thickness/2,handle/2,thickness/2])
+			translate([handle,(handle*1.5)/2,thickness/2])
 				rotate([90,90,0])
-					cylinder(h = handle*2, r=hole, center=true);
+					cylinder(h = handle*2, d=hole, center=true);
 			translate([handle*0.2,((handle*1.5)/2)-(slot/2),-thickness/2])
-					cube([handle,slot,thickness*2], centre=true);
+					cube([handle*2,slot,thickness*2], centre=true);
 		}
 	}
 
 module Light()
 {
-	radius = 120;
-	radius_lens = 90;
-	radius_diff = radius - radius_lens;
-	lights = 6;
-	LEDSize = 2.5;
-	thickness = 25;
+	d = 120;
+	d_lens = 90;
+	d_diff = d - d_lens;
+	lights = 12;
+	LEDSize = 5.25;
+	thickness = 20;
 	union() {
+	Handle(25,d/2,thickness,6.5,11);
 	difference() {
-		cylinder(h = thickness, r=radius, center=true);
-		cylinder(h = thickness*1.2, r=radius_lens*0.95, center=true);
+		cylinder(h = thickness, r=d/2, center=true);
+		cylinder(h = thickness*1.2, r=d_lens*0.45, center=true);
 		translate([0,0,thickness / 3]) 
-			cylinder(h = thickness*1.2, r=radius_lens, center=true);
-		WireSlot(radius-(radius_diff/2),thickness,LEDSize);
-		LEDs(lights,radius-(radius_diff/2),thickness,LEDSize);
-		
-		
+			cylinder(h = thickness*1.2, d=d_lens, center=true);
+		WireSlot((d-(d_diff/2))/2,thickness,LEDSize,4);
+		LEDs(lights,(d-(d_diff/2))/2,thickness,LEDSize);
 	}
-	Handle(40,radius,thickness,3.25,11);
+	
 	}
 }
 
