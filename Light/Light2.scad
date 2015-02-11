@@ -37,10 +37,10 @@ module Handle(handle,radius,thickness,hole,slot)
 
 module Light()
 {
-	d = 120;
+	d = 140;
 	d_lens = 90;
 	d_diff = d - d_lens;
-	lights = 12;
+	lights = 24;
 	LEDSize = 5.25;
 	thickness = 20;
 	union() {
@@ -50,7 +50,7 @@ module Light()
 		cylinder(h = thickness*1.2, r=d_lens*0.45, center=true);
 		translate([0,0,thickness / 3]) 
 			cylinder(h = thickness*1.2, d=d_lens, center=true);
-		WireSlot((d-(d_diff/2))/2,thickness,LEDSize,4);
+		WireSlot((d-(d_diff/2))/2,thickness,LEDSize,6);
 		LEDs(lights,(d-(d_diff/2))/2,thickness,LEDSize);
 	}
 	
