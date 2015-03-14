@@ -28,11 +28,11 @@ module nut(size, height) {
 					}
 				};
 		  translate([0,0,height/2])	
-			hexagon(10.5,height);
+			hexagon(10.25,height);
 		  }
 	  /* Collar */
 	  translate([0,0,-height])
-		cylinder(r=8,height,$fn=64,centre=true);
+		cylinder(r=7,height,$fn=64,centre=true);
 	  }
 	/* Hole for bolt */
 	translate([0,0,-height*2])	
@@ -40,4 +40,5 @@ module nut(size, height) {
   }
 }
 
-nut(20,7);
+rotate([0,180,0])
+	nut(18,7);
