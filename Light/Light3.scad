@@ -55,8 +55,6 @@ module Body(thickness,d,d_lens,lights,LEDSize)
 			translate([(d/2)-(d_diff/2),30,thickness/2-1])
 				rotate([0,110,0])
 					cylinder(h = 25, d=4.25,centre=true);
-			translate([0,0,-thickness])
-				cylinder(h=10,d=d+100,centre=true);
 		}	
 	}
 	
