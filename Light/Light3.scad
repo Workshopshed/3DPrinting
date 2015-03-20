@@ -48,9 +48,17 @@ module Body(thickness,d,d_lens,lights,LEDSize)
 				cylinder(h = thickness*1.2, d=d_lens, center=true);
 			WireSlot((d-(d_diff/2))/2,thickness,LEDSize,6);
 			LEDs(lights,(d-(d_diff/2))/2,thickness,LEDSize);
+			//Holes for lights
+			translate([(d/2)-(d_diff/2),23,thickness/2])
+				rotate([0,110,0])
+					cylinder(h = 25, d=4.25,centre=true);
+			translate([(d/2)-(d_diff/2),30,thickness/2-1])
+				rotate([0,110,0])
+					cylinder(h = 25, d=4.25,centre=true);
 		}	
 	}
 	
+
 
 module Light()
 {
@@ -63,7 +71,7 @@ module Light()
 	slot=11;
 	difference() {
 		union() {
-		Handle(25,d/2,thickness,6.5);
+		Handle(handle,d/2,thickness,6.5);
 		Body(thickness,d,d_lens,lights,LEDSize);
 		}
 		translate([(d/2)+3,-slot/2,-thickness])
