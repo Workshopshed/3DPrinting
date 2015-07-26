@@ -36,7 +36,7 @@ module Lid(thickness,d,d_lens,tabwidth)
 		d_diff = d - d_lens;
 		radius = (d-(d_diff/2))/2;
 		WallThickness = 5.75;
-		clearance = 0.8;
+		clearance = 1;
 		tabthickness = 3;
 		$fn = 100;
 		union() {
