@@ -31,12 +31,12 @@ module Handle(handle,radius,thickness,hole)
 		}
 	}
 
-module Lid(thickness,d,d_lens)
+module Lid(thickness,d,d_lens,tabwidth)
 	{
 		d_diff = d - d_lens;
 		radius = (d-(d_diff/2))/2;
 		WallThickness = 5.75;
-		clearance = 0.4;
+		clearance = 0.8;
 		tabthickness = 3;
 		$fn = 100;
 		union() {
@@ -59,11 +59,12 @@ module Lid(thickness,d,d_lens)
 				}		
 			}
 		}
-		
+		//Tab
+		tabradius = radius-WallThickness;
 		translate([0,0,tabthickness*2.1]) 
 		difference() {
-			cylinder(h = tabthickness, r=(radius)+WallThickness-clearance, center=true);
-			cylinder(h = tabthickness*1.6, r=(radius)-WallThickness, center=true);
+			cylinder(h = tabthickness, r=tabradius+tabwidth-clearance, center=true);
+			cylinder(h = tabthickness*1.6, r=tabradius+clearance, center=true);
 		}
 	}
 
@@ -107,8 +108,9 @@ module Light()
 	LEDSize = 5.75;
 	thickness = 20;
 	handle=22;
-	slot=11;
-
+	slot=11; //in handle
+	tabwidth = LEDSize*2;
+/*
 	difference() {
 		union() {
 		Handle(handle,d/2,thickness,6.5);
@@ -118,9 +120,10 @@ module Light()
 			cube([handle*2,slot,thickness*2], centre=true);
 
 	}
-
+*/
+	rotate([0,180,0])
 	translate([0,0,10])
-		Lid(thickness,d,d_lens);
+		Lid(thickness,d,d_lens,tabwidth);
 }
 
 Light();
