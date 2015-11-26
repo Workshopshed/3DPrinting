@@ -2,9 +2,12 @@ offset = 0.5;
 
 module mountingpost() {
     difference() {
-        cylinder(h=5,r=1.5,$fn=30);
-        translate([0,0,3])
-            cylinder(h=3,r=0.5,$fn=30);
+        hull() {
+            translate([5,5,0]) cylinder(h=3,r=1.5,$fn=30);
+                cylinder(h=3,r=1.5,$fn=30);;
+        }
+        translate([0,0,1])
+            cylinder(h=4,r=0.5,$fn=30);
     }
 }
 
@@ -13,8 +16,8 @@ module plate(width,depth,height) {
     translate([-width/2,-depth/2,-height/2]) {
         minkowski()
         {
-         cube([width,depth,h], centre=true);
-         cylinder(r=2,h=height,centre=true);
+         cube([width,depth,height], centre=true);
+         cylinder(r=2,h=1,centre=true);
         }
     }
     
@@ -36,8 +39,8 @@ module slot(len=10) {
 module case() {
 union() {
     difference() {
-        plate(70,35,15);
-        translate([0,0,2.5])
+        plate(70,35,10);
+        translate([0,0,3])
             plate(65,30,15);
         translate([5,-15,0])
             slot();
@@ -49,14 +52,17 @@ union() {
             rotate([0,0,90])
                 slot(14);
     }
-    translate([30,12,-7])
+    translate([30,12,-5])
         mountingpost();
-    translate([30,-12,-7])
-        mountingpost();
-    translate([-30,12,-7])
-        mountingpost();
-    translate([-30,-12,-7])
-        mountingpost();
+    translate([30,-12,-5])
+        rotate([0,0,-90])
+            mountingpost();
+    translate([-30,12,-5])
+        rotate([0,0,90])
+            mountingpost();
+    translate([-30,-12,-5])
+        rotate([0,0,180])
+            mountingpost();
 }
 }
 
