@@ -11,6 +11,19 @@ module mountingpost() {
     }
 }
 
+module foot()
+{
+    difference() {
+        hull() {
+            cube([3,8,2]);
+            translate([-4,4,0])
+                cylinder(h=2,r=4,$fn=30);;
+        }
+        translate([-4,4,-1])
+        cylinder(h=6,r=1,$fn=30);
+    }
+}
+
 module plate(width,depth,height) {
     $fn=50;
     translate([-width/2,-depth/2,-height/2]) {
@@ -20,7 +33,6 @@ module plate(width,depth,height) {
          cylinder(r=2,h=1,centre=true);
         }
     }
-    
 }
 
 module slot(len=10) {
@@ -63,6 +75,12 @@ union() {
     translate([-30,-12,-5])
         rotate([0,0,180])
             mountingpost();
+    
+    translate([38,19.5,-5])
+        rotate([0,0,180])
+            foot();
+    translate([-38,-19.5,-5])
+            foot();
 }
 }
 
@@ -88,7 +106,7 @@ module lid() {
 }
 
 case();
-translate([100,0,-6.5]) {
+translate([100,0,-3.5]) {
     lid();
 }
 
