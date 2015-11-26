@@ -3,7 +3,7 @@ offset = 0.5;
 module mountingpost() {
     difference() {
         hull() {
-            translate([5,5,0]) cylinder(h=3,r=1.5,$fn=30);
+            translate([3,3,0]) cylinder(h=3,r=4,$fn=30);
                 cylinder(h=3,r=1.5,$fn=30);;
         }
         translate([0,0,1])
