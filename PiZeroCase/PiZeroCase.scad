@@ -91,10 +91,10 @@ union() {
         rotate([0,0,180])
             mountingpost();
     
-    translate([(length/2)+21,(width/2)-20,0])
+    translate([(length/2)+21+wall,(width/2)-20,0])
         rotate([0,0,180])
             foot();
-    translate([-(length/2)-21,-(width/2)+20,0])
+    translate([-(length/2)-21-wall,-(width/2)+20,0])
             foot();
 }
 }
@@ -158,4 +158,4 @@ translate([0,-50,-3.5]) {
 }
 
 translate([0,0,4])
-	pizero();
+	*pizero();
