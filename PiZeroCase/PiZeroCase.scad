@@ -154,8 +154,8 @@ module pizero()
 case(72,35);
 translate([0,-50,-3.5]) {
 	rotate([180,0,0])
-		*lid();
+		lid();
 }
 
 translate([0,0,4])
-	*pizero();
+	pizero();
