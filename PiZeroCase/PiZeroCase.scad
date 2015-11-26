@@ -1,13 +1,14 @@
 offset = 0.5;
+wall = 1.4;
 
-module mountingpost() {
+module mountingpost(width,length,x,y) {
     difference() {
         hull() {
-            translate([3,3,0]) cylinder(h=3,r=4,$fn=30);
-                cylinder(h=3,r=1.5,$fn=30);;
+            translate([5.0,5.0,0]) cylinder(h=4,r=3.0,$fn=30);
+                cylinder(h=4,r=1.5,$fn=30);
         }
         translate([0,0,1])
-            cylinder(h=4,r=0.5,$fn=30);
+            cylinder(h=5,r=0.5,$fn=30);
     }
 }
 
@@ -26,7 +27,7 @@ module foot()
 
 module plate(width,depth,height) {
     $fn=50;
-    translate([-width/2,-depth/2,-height/2]) {
+    translate([-width/2,-depth/2,0]) {
         minkowski()
         {
          cube([width,depth,height], centre=true);
@@ -35,51 +36,65 @@ module plate(width,depth,height) {
     }
 }
 
-module slot(len=10) {
-    union() {
-        cube([len,10,3], center=true);
-        translate([-len/2,5,0])
-            rotate([90,0,0])
-            cylinder(h=10,r=1.5,$fn=30);
-        translate([len/2,5,0])
-            rotate([90,0,0])
-            cylinder(h=10,r=1.5,$fn=30);
-    }
+module slot(len=10,height=8) {
+	translate([0,20,0]){
+		hull(){
+			hull(){
+			translate([-len/2+1.5,0,height/2])
+				rotate([90,0,0])
+				cylinder(h=10,d=2,$fn=30);
+			translate([len/2-1.5,0,height/2])
+				rotate([90,0,0])
+				cylinder(h=10,d=2,$fn=30);
+			}
+			hull(){	
+			translate([-len/2+1.5,0,-height/2])
+				rotate([90,0,0])
+				cylinder(h=10,d=2,$fn=30);
+			translate([len/2-1.5,0,-height/2])
+				rotate([90,0,0])
+				cylinder(h=10,d=2,$fn=30);			
+			}
+		}
+	}
 }
 
 
-module case() {
+module case(width,length) {
 union() {
+	
+	Xoffset = 65/2;
+	Yoffset = 30/2;
     difference() {
-        plate(70,35,10);
-        translate([0,0,3])
-            plate(65,30,15);
-        translate([5,-15,0])
-            slot();
-        translate([20,-15,0])
-            slot();
-        translate([-18,-15,0])
-            slot(14);
-        translate([-33,0,0])
+        plate(width,length,14);
+        translate([0,0,wall])
+            plate(width-(2*wall),length-(2*wall),20);
+        translate([41.4-Xoffset,-width/2,7])
+            slot(11,3);
+        translate([54-Xoffset,-width/2,7])
+            slot(11,3);
+        translate([12.4-Xoffset,-width/2,8])
+            slot(14,4);
+        translate([12.4-Xoffset,16.9-Yoffset,7])
             rotate([0,0,90])
-                slot(14);
+                slot(17,2.5);
     }
-    translate([30,12,-5])
+    translate([29,23/2,0])
         mountingpost();
-    translate([30,-12,-5])
+    translate([29,-23/2,0])
         rotate([0,0,-90])
             mountingpost();
-    translate([-30,12,-5])
+    translate([-29,23/2,0])
         rotate([0,0,90])
             mountingpost();
-    translate([-30,-12,-5])
+    translate([-29,-23/2,0])
         rotate([0,0,180])
             mountingpost();
     
-    translate([38,19.5,-5])
+    translate([(length/2)+21,(width/2)-20,0])
         rotate([0,0,180])
             foot();
-    translate([-38,-19.5,-5])
+    translate([-(length/2)-21,-(width/2)+20,0])
             foot();
 }
 }
@@ -87,14 +102,14 @@ union() {
 module lid() {
     difference() {
         union() {
-            plate(70,35,3);
+            plate(72,35,3);
             translate([0,0,2.5])
                 difference() {
-                    plate(65-offset,30-offset,3);
-                    plate(62,27,4);
+                    plate(72-(2*wall)-offset,35-(2*wall)-offset,3);
+                    plate(72-(4*wall)-offset,35-(4*wall)-offset,4);
                     }
             }
-         translate([-19,10,0]) {
+         translate([-19,10,2]) {
                 rotate([180,0,0]) {
                     linear_extrude(height = 10)
                     {
@@ -105,8 +120,42 @@ module lid() {
     }
 }
 
-case();
-translate([100,0,-3.5]) {
-    lid();
+module pizero()
+{
+	//Rough Pi to check sizes against
+	union() {
+	color("green") {
+		difference() {
+		plate(65,30,1);
+		translate([(58/2),(23/2),-2.5])	
+			cylinder(h=10,d=2.75,$fn=30);
+		translate([-(58/2),-(23/2),-2.5])	
+			cylinder(h=10,d=2.75,$fn=30);
+		translate([(58/2),-(23/2),-2.5])	
+			cylinder(h=10,d=2.75,$fn=30);
+		translate([-(58/2),(23/2),-2.5])	
+			cylinder(h=10,d=2.75,$fn=30);
+		}
+	}
+	color("silver"){
+		translate([-(65/2)+54,-15,3])
+			cube([9,8,3],center=true);
+		translate([-(65/2)+41.4,-15,3])
+			cube([9,8,3],center=true);
+		translate([-(65/2)+4,-15+16.9,3])
+			cube([15,15,3],center=true);
+		translate([-(65/2)+12.4,-13,5])
+			cube([14,10,5],center=true);
+		}
+	}
 }
 
+
+case(72,35);
+translate([0,-50,-3.5]) {
+	rotate([180,0,0])
+		*lid();
+}
+
+translate([0,0,4])
+	pizero();
